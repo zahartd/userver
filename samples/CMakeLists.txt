@@ -117,6 +117,11 @@ if (USERVER_FEATURE_YDB AND USERVER_FEATURE_MONGODB)
   add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}-ydb_service)
 endif()
 
+if (USERVER_FEATURE_SQLITE)
+  add_subdirectory(sqlite_service)
+  add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}-sqlite_service)
+endif()
+
 # Clean up fake userver installation above to avoid messing
 # with find_package(userver) in the parent project.
 file(REMOVE "${CMAKE_BINARY_DIR}/package_stubs/userverConfig.cmake")

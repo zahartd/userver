@@ -129,6 +129,7 @@ option(USERVER_FEATURE_RABBITMQ "Provide asynchronous driver for RabbitMQ" "${US
 option(USERVER_FEATURE_MYSQL "Provide asynchronous driver for MariaDB/MySQL" "${USERVER_LIB_ENABLED_DEFAULT}")
 option(USERVER_FEATURE_ROCKS "Provide asynchronous driver for Rocks" "${USERVER_LIB_ENABLED_DEFAULT}")
 option(USERVER_FEATURE_YDB "Provide asynchronous driver for YDB" "${USERVER_YDB_DEFAULT}")
+option(USERVER_FEATURE_SQLITE "Provide asynchronous driver for SQLite" "${USERVER_LIB_ENABLED_DEFAULT}")
 
 set(CMAKE_DEBUG_POSTFIX d)
 
@@ -253,6 +254,12 @@ if (USERVER_FEATURE_YDB)
   _require_userver_core("USERVER_FEATURE_YDB")
   add_subdirectory(ydb)
   list(APPEND USERVER_AVAILABLE_COMPONENTS ydb)
+endif()
+
+if (USERVER_FEATURE_SQLITE)
+  _require_userver_core("USERVER_FEATURE_SQLITE")
+  add_subdirectory(sqlite)
+  list(APPEND USERVER_AVAILABLE_COMPONENTS sqlite)
 endif()
 
 _userver_export_targets()
