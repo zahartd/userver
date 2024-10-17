@@ -5,11 +5,6 @@
 USERVER_NAMESPACE_BEGIN
 
 namespace components {
-namespace {
-
-[[maybe_unused]] constexpr auto kStatisticsName = "sqlite";
-
-}  // namespace
 
 SQLite::SQLite(const ComponentConfig& config,
                    const ComponentContext& context)
