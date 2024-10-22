@@ -39,6 +39,7 @@ class UserverConan(ConanFile):
         'with_utest': [True, False],
         'with_kafka': [True, False],
         'with_otlp': [True, False],
+        'with_sqlite': [True, False],
         'namespace': ['ANY'],
         'namespace_begin': ['ANY'],
         'namespace_end': ['ANY'],
@@ -58,6 +59,7 @@ class UserverConan(ConanFile):
         'with_utest': True,
         'with_kafka': True,
         'with_otlp': True,
+        'with_sqlite': True,
         'namespace': 'userver',
         'namespace_begin': 'namespace userver {',
         'namespace_end': '}',
@@ -167,6 +169,8 @@ class UserverConan(ConanFile):
             )
         if self.options.with_kafka:
             self.requires('librdkafka/2.4.0')
+        if self.options.with_sqlite:
+            self.requires('sqlite3/3.46.1')
 
     def validate(self):
         if self.settings.os == 'Windows':
@@ -224,6 +228,7 @@ class UserverConan(ConanFile):
         )
         tool_ch.variables['USERVER_FEATURE_KAFKA'] = self.options.with_kafka
         tool_ch.variables['USERVER_FEATURE_OTLP'] = self.options.with_otlp
+        tool_ch.variables['USERVER_FEATURE_SQLITE'] = self.options.with_sqlite
         tool_ch.generate()
 
         CMakeDeps(self).generate()
@@ -395,6 +400,9 @@ class UserverConan(ConanFile):
         if self.options.with_otlp:
             copy_component('otlp')
 
+        if self.options.with_sqlite:
+            copy_component('sqlite')
+
     @property
     def _userver_components(self):
         def abseil():
@@ -497,6 +505,9 @@ class UserverConan(ConanFile):
             return (
                 ['librdkafka::librdkafka'] if self.options.with_kafka else []
             )
+
+        def sqlite3():
+            return ['SQLite::SQLite3'] if self.options.with_sqlite else []
 
         userver_components = [
             {
@@ -640,6 +651,15 @@ class UserverConan(ConanFile):
         if self.options.with_otlp:
             userver_components.extend([
                 {'target': 'otlp', 'lib': 'otlp', 'requires': ['core']},
+            ])
+
+        if self.options.with_sqlite:
+            userver_components.extend([
+                {
+                    'target': 'sqlite',
+                    'lib': 'sqlite',
+                    'requires': ['core'] + sqlite3(),
+                },
             ])
         return userver_components
 

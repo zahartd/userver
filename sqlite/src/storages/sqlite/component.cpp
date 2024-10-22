@@ -2,6 +2,9 @@
 
 #include <userver/components/component.hpp>
 
+#include <sqlite3.h>
+#include <sqlite3ext.h>
+
 USERVER_NAMESPACE_BEGIN
 
 namespace components {
