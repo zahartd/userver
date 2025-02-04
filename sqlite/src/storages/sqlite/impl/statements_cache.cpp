@@ -17,19 +17,17 @@ StatementsCache::StatementsCache(sqlite3* db_handler, std::size_t capacity)
 
 StatementsCache::~StatementsCache() = default;
 
-std::shared_ptr<Statement> StatementsCache::PrepareStatement(
-    const std::string& statement) {
+Statement& StatementsCache::PrepareStatement(const std::string& statement) {
   auto* val_ptr = cache_.Get(statement);
   if (val_ptr) {
     return *val_ptr;
   }
   if (cache_.GetSize() == cache_.GetCapacity()) {
-    auto statement_to_be_deleted = *cache_.GetLeastUsed();
+    auto* statement_to_be_deleted = cache_.GetLeastUsed();
     UASSERT(statement_to_be_deleted);
     cache_.Erase(statement_to_be_deleted->GetStatementText());
   }
-  return *cache_.Emplace(statement,
-                         std::make_shared<Statement>(db_handler_, statement));
+  return *cache_.Emplace(statement, db_handler_, statement);
 }
 
 }  // namespace storages::sqlite::impl

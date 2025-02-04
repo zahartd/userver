@@ -29,12 +29,12 @@ class StatementsCache final {
   // CRITICAL <userver> ERROR at
   // userver/universal/include/userver/cache/impl/lru.hpp:344:InsertNode.
   // Assertion 'ok' failed
-  std::shared_ptr<Statement> PrepareStatement(const std::string& statement);
+  Statement& PrepareStatement(const std::string& statement);
 
  private:
   sqlite3* db_handler_;
 
-  cache::LruMap<std::string, std::shared_ptr<Statement>, utils::StrIcaseHash,
+  cache::LruMap<std::string, Statement, utils::StrIcaseHash,
                 utils::StrIcaseEqual>
       cache_;
 };
