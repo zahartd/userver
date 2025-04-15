@@ -61,8 +61,9 @@ std::string KeyValue::HandleRequest(server::http::HttpRequest& request, server::
         case server::http::HttpMethod::kDelete:
             return DeleteValue(key);
         default:
-            throw server::handlers::ClientError(server::handlers::ExternalBody{
-                fmt::format("Unsupported method {}", request.GetMethod())});
+            throw server::handlers::ClientError(
+                server::handlers::ExternalBody{fmt::format("Unsupported method {}", request.GetMethod())}
+            );
     }
 }
 /// [Postgres service sample - HandleRequestThrow]
